@@ -12,6 +12,63 @@ const config: Config = {
     extend: {},
   },
   darkMode: "class",
-  plugins: [nextui()],
+  plugins: [
+    nextui({
+      themes: {
+        light: {
+          colors: {
+            background: "#FFFFFF",
+            foreground: "#11181C",
+            primary: {
+              "50": "#fff1f1",
+              "100": "#fee5e6",
+              "200": "#fdced2",
+              "300": "#fba6ad",
+              "400": "#f77582",
+              "500": "#ef4056",
+              "600": "#dc2243",
+              "700": "#ba1637",
+              "800": "#9b1635",
+              "900": "#851633",
+              "950": "#4a0717",
+              DEFAULT: "#ef4056",
+              foreground: "#FFFFFF",
+            },
+          },
+        },
+        dark: {
+          colors: {
+            background: "#000000",
+            foreground: "#ECEDEE",
+            primary: {
+              "50": "#fff1f1",
+              "100": "#fee5e6",
+              "200": "#fdced2",
+              "300": "#fba6ad",
+              "400": "#f77582",
+              "500": "#ef4056",
+              "600": "#dc2243",
+              "700": "#ba1637",
+              "800": "#9b1635",
+              "900": "#851633",
+              "950": "#4a0717",
+              DEFAULT: "#ef4056",
+              foreground: "#FFFFFF",
+            },
+          },
+        },
+        /* mytheme: {
+          extend: "light",
+          colors: {
+            primary: {
+              DEFAULT: "#BEF264",
+              foreground: "#000000",
+            },
+            focus: "#BEF264",
+          },
+        }, */
+      },
+    }),
+  ],
 };
 export default config;
