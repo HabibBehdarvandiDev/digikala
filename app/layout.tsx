@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import localFont from "next/font/local";
+import { NextUIProvider } from "@nextui-org/react";
 
 const yekan = localFont({
   src: [
@@ -59,7 +60,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fa">
-      <body className={yekan.className}>{children}</body>
+      <body className={yekan.className}>
+        <NextUIProvider>{children}</NextUIProvider>
+      </body>
     </html>
   );
 }
