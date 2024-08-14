@@ -43,7 +43,7 @@ const LoginPage = () => {
               />
             </div>
             <div className="form-control w-full">
-              <Link href={`/users/login/otp_validation?phoneNumber=${phoneNumber}`}>
+              <Link href={`/users/login/otp_validation?phoneNumber=0${phoneNumber}`}>
                 <Button color="primary" className="w-full" size="lg">
                   ورود
                 </Button>

@@ -3,11 +3,24 @@
 import { Button, Input } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
 
 const OtpValidationPage = () => {
-    const searchParams = useSearchParams()
-    const phoneNumber = searchParams.get('phoneNumber');
+  const router = useRouter();
+  const [otp, setOtp] = useState<string>("");
+
+  const searchParams = useSearchParams();
+  const phoneNumber = searchParams.get("phoneNumber");
+  const fallBackUrl = searchParams.get("fallBackUrl")
+    ? searchParams.get("fallBackUrl")
+    : "https://localhost:3000";
+
+  const validateOtp = () => {
+    if (parseInt(otp) === 123456) {
+      router.push("/");
+    }
+  };
 
   return (
     <div className="w-screen h-screen flex justify-center align-middle items-center">
@@ -25,17 +38,27 @@ const OtpValidationPage = () => {
           <div className="controls flex flex-col space-y-10">
             <div className="form-control w-full space-y-3">
               <label htmlFor="phone_number" className="text-xs text-zinc-500 ">
-                کد تایید برای شماره {"0" + phoneNumber} پیامک شد
+                کد تایید برای شماره{" "}
+                <span className="text-sm font-semibold">
+                  {"0" + phoneNumber}
+                </span>{" "}
+                پیامک شد
               </label>
               <Input
                 dir="ltr"
                 variant="flat"
                 size="lg"
                 type="number"
+                onChange={(e) => setOtp(e.target.value)}
               />
             </div>
             <div className="form-control w-full">
-              <Button color="primary" className="w-full" size="lg">
+              <Button
+                color="primary"
+                className="w-full"
+                size="lg"
+                onClick={validateOtp}
+              >
                 ورود
               </Button>
             </div>
