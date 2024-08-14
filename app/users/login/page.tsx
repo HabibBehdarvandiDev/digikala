@@ -2,11 +2,32 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Button, Input } from "@nextui-org/react";
-import { useState } from "react";
+import { Button, Input, Link as link } from "@nextui-org/react";
+import { ChangeEvent, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 const LoginPage = () => {
+  const searchParams = useSearchParams();
+  const fallBackUrl = searchParams.get("fallBackUrl")
+    ? searchParams.get("fallBackUrl")
+    : "http://localhost:3000";
+
   const [phoneNumber, setPhoneNumber] = useState<string | null>(null);
+  const [error, setError] = useState("");
+
+  const handlePhoneNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+
+    // Regex to match the desired phone number formats
+    const regex = /^(?:\+98|0)\d{10}$/;
+
+    if (regex.test(value)) {
+      setPhoneNumber(value);
+      setError(""); // Clear any previous errors
+    } else {
+      setError("لطفا شماره تلفن معتبر وارد کنید");
+    }
+  };
 
   return (
     <div className="w-screen h-screen flex justify-center align-middle items-center">
@@ -34,20 +55,22 @@ const LoginPage = () => {
                 variant="flat"
                 size="lg"
                 type="number"
-                endContent={
-                  <div className="pointer-events-none flex items-center mr-2">
-                    <span className="text-default-400 text-small">98+</span>
-                  </div>
-                }
-                onChange={(e) => setPhoneNumber(e.target.value)}
+                onChange={(e) => handlePhoneNumberChange(e)}
               />
+              {error && (
+                <span className="text-red-500 text-small">{error}</span>
+              )}
             </div>
             <div className="form-control w-full">
-              <Link href={`/users/login/otp_validation?phoneNumber=0${phoneNumber}`}>
-                <Button color="primary" className="w-full" size="lg">
-                  ورود
-                </Button>
-              </Link>
+              <Button
+                color="primary"
+                className="w-full"
+                size="lg"
+                href={`/users/login/otp_validation?phoneNumber=${phoneNumber}&fallBackUrl=${fallBackUrl}`}
+                as={link}
+              >
+                ورود
+              </Button>
             </div>
             <div className="form-control w-full">
               <span className="text-xs text-nowrap ">

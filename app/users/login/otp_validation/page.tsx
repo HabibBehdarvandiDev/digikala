@@ -14,11 +14,11 @@ const OtpValidationPage = () => {
   const phoneNumber = searchParams.get("phoneNumber");
   const fallBackUrl = searchParams.get("fallBackUrl")
     ? searchParams.get("fallBackUrl")
-    : "https://localhost:3000";
+    : "/";
 
   const validateOtp = () => {
     if (parseInt(otp) === 123456) {
-      router.push("/");
+      router.push(fallBackUrl!);
     }
   };
 
@@ -39,9 +39,7 @@ const OtpValidationPage = () => {
             <div className="form-control w-full space-y-3">
               <label htmlFor="phone_number" className="text-xs text-zinc-500 ">
                 کد تایید برای شماره{" "}
-                <span className="text-sm font-semibold">
-                  {"0" + phoneNumber}
-                </span>{" "}
+                <span className="text-sm font-semibold">{phoneNumber}</span>{" "}
                 پیامک شد
               </label>
               <Input
