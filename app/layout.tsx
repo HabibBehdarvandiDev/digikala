@@ -60,7 +60,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fa">
+    <html lang="fa" dir="rtl">
       <body className={yekan.className}>
         <NextUIProvider>
           <NextThemesProvider attribute="class" defaultTheme="light">
