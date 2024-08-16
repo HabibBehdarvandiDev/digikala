@@ -2,6 +2,7 @@
 
 import Logo from "@/public/logo.svg";
 import { Button, Input } from "@nextui-org/react";
+import axios from "axios";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -25,11 +26,20 @@ const OtpValidationPage = () => {
     setFallBackUrl(fallBack!);
   }, [searchParams]);
 
-  const checkOtp = () => {
+  const checkOtp = async () => {
     //check OTP code
     if (parseInt(code!) !== 123456) {
       return;
     }
+
+    await axios
+      .post("http://localhost:3000/api/v1/auth/register", {
+        phoneNumber,
+      })
+      .then((response) => {
+        const { token } = response.data;
+        sessionStorage.setItem("token", token);
+      });
 
     // if success must create new user and also create JWT to save in localStorage
     router.push(fallBackUrl!);

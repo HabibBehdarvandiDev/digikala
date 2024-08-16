@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 const RegisterPage = () => {
   const router = useRouter();
   const [value, setValue] = useState<string | null>(null);
+  const [errMessage, setErrMessage] = useState<string | null>(null);
+  const [invalidInput, setInvalidInput] = useState<boolean | null>(false);
 
   const emailOrPhone = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -21,7 +23,10 @@ const RegisterPage = () => {
         `http://localhost:3000/auth?phoneNumber=${value}&fallBackUrl=http://localhost:3000/`
       );
     } else {
-      return;
+      setErrMessage(
+        "از فرمت وارد شده برای ایمیل و یا شماره همرا اطمینان حاصل فرمایید"
+      );
+      setInvalidInput(true);
     }
   };
 
@@ -49,12 +54,11 @@ const RegisterPage = () => {
             variant="bordered"
             size="lg"
             color="primary"
-            required
+            isRequired
             onChange={(e) => setValue(e.target.value)}
+            isInvalid={invalidInput!}
+            errorMessage={errMessage}
           />
-          {/* <span className="text-xs text-red-600">
-            لطفا این قسمت را خالی نگذارید
-          </span> */}
         </div>
         <Button
           color="primary"
