@@ -43,7 +43,7 @@ const RegisterPage = () => {
           <label htmlFor="phoneNumber" className="text-xs text-gray-400">
             سلام!
             <br />
-            لطفا شماره موبایل یا ایمیل خود را وارد کنید
+            لطفا شماره موبایل خود را وارد کنید
           </label>
           <Input
             variant="bordered"
