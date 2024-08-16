@@ -1,4 +1,5 @@
 import prisma from "@/utils/db";
+import { createJWT } from "@/utils/session";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -47,12 +48,13 @@ export async function POST(req: NextRequest) {
     const user = await prisma.users.create({
       data: {
         phone_number: validation.data.phoneNumber,
-        
       },
     });
 
-    return NextResponse.json(user);
+    const token = await createJWT({ userId: user.id, role: "admin" }, "2h");
+
+    return NextResponse.json({ status: 200, token, user });
   } catch (error) {
-    return NextResponse.json({ error: "faild connect to DB" },{status:500});
+    return NextResponse.json({ error: "faild connect to DB" }, { status: 500 });
   }
 }
