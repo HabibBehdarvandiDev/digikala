@@ -5,6 +5,7 @@ import Logo from "@/public/logo.svg";
 import { Button, Input } from "@nextui-org/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 const RegisterPage = () => {
   const router = useRouter();
@@ -13,24 +14,50 @@ const RegisterPage = () => {
   const [invalidInput, setInvalidInput] = useState<boolean | null>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const emailOrPhone = () => {
+  const emailOrPhone = async () => {
     setLoading(true);
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phoneRegex = /^(09\d{9}|\+98\d{10})$/;
 
+    // Validate input format
     if (emailRegex.test(value!)) {
       return "email";
     } else if (phoneRegex.test(value!)) {
-      router.push(
-        `http://localhost:3000/auth?phoneNumber=${value}&fallBackUrl=http://localhost:3000/`
-      );
+      try {
+        // Check if the phone number already exists
+        const response = await axios.get(
+          `http://localhost:3000/api/v1/users/userbyphone?phoneNumber=${value}`
+        );
+
+        if (response.status === 200) {
+          // User already exists, show error message and stop
+          setErrMessage(
+            "شماره تلفن وارد شده قبلاً ثبت شده است، لطفاً وارد شوید"
+          );
+          setInvalidInput(true);
+          setLoading(false);
+          return;
+        }
+      } catch (error: any) {
+        if (error.response && error.response.status === 404) {
+          // User not found, proceed to OTP validation
+          router.push(
+            `http://localhost:3000/auth?phoneNumber=${value}&fallBackUrl=http://localhost:3000/`
+          );
+        } else {
+          // Handle other potential errors (e.g., network issues)
+          setErrMessage("خطایی در برقراری ارتباط با سرور رخ داد");
+        }
+      }
     } else {
-      setLoading(false);
+      // Invalid input format, show error message
       setErrMessage(
-        "از فرمت وارد شده برای ایمیل و یا شماره همرا اطمینان حاصل فرمایید"
+        "از فرمت وارد شده برای ایمیل و یا شماره همراه اطمینان حاصل فرمایید"
       );
       setInvalidInput(true);
     }
+
+    setLoading(false);
   };
 
   return (
@@ -58,7 +85,11 @@ const RegisterPage = () => {
             size="lg"
             color="primary"
             isRequired
-            onChange={(e) => setValue(e.target.value)}
+            onChange={(e) => {
+              setValue(e.target.value);
+              setInvalidInput(false);
+              setErrMessage(null);
+            }}
             isInvalid={invalidInput!}
             errorMessage={errMessage}
             isDisabled={loading}
@@ -68,7 +99,7 @@ const RegisterPage = () => {
           color="primary"
           className="w-full mt-5"
           size="lg"
-          onClick={() => console.log(emailOrPhone())}
+          onClick={emailOrPhone}
           isLoading={loading}
           isDisabled={loading}
         >
