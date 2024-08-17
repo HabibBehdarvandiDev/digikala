@@ -23,32 +23,9 @@ const RegisterPage = () => {
     if (emailRegex.test(value!)) {
       return "email";
     } else if (phoneRegex.test(value!)) {
-      try {
-        // Check if the phone number already exists
-        const response = await axios.get(
-          `http://localhost:3000/api/v1/users/userbyphone?phoneNumber=${value}`
-        );
-
-        if (response.status === 200) {
-          // User already exists, show error message and stop
-          setErrMessage(
-            "شماره تلفن وارد شده قبلاً ثبت شده است، لطفاً وارد شوید"
-          );
-          setInvalidInput(true);
-          setLoading(false);
-          return;
-        }
-      } catch (error: any) {
-        if (error.response && error.response.status === 404) {
-          // User not found, proceed to OTP validation
-          router.push(
-            `http://localhost:3000/auth?phoneNumber=${value}&fallBackUrl=http://localhost:3000/`
-          );
-        } else {
-          // Handle other potential errors (e.g., network issues)
-          setErrMessage("خطایی در برقراری ارتباط با سرور رخ داد");
-        }
-      }
+      router.push(
+        `http://localhost:3000/auth?phoneNumber=${value}&fallBackUrl=http://localhost:3000/`
+      );
     } else {
       // Invalid input format, show error message
       setErrMessage(

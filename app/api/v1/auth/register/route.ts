@@ -33,11 +33,16 @@ export async function POST(req: NextRequest) {
     });
 
     if (existingUser) {
+      // Generate JWT
+      const token = await createJWT(
+        { userId: existingUser.id, role: "admin" },
+        "2h"
+      );
       return NextResponse.json(
         {
-          error: "کاربر با این شماره تلفن از قبل وجود دارد",
+          token,
         },
-        { status: 409 }
+        { status: 200 }
       );
     }
 
