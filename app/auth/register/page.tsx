@@ -11,8 +11,10 @@ const RegisterPage = () => {
   const [value, setValue] = useState<string | null>(null);
   const [errMessage, setErrMessage] = useState<string | null>(null);
   const [invalidInput, setInvalidInput] = useState<boolean | null>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const emailOrPhone = () => {
+    setLoading(true);
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phoneRegex = /^(09\d{9}|\+98\d{10})$/;
 
@@ -23,6 +25,7 @@ const RegisterPage = () => {
         `http://localhost:3000/auth?phoneNumber=${value}&fallBackUrl=http://localhost:3000/`
       );
     } else {
+      setLoading(false);
       setErrMessage(
         "از فرمت وارد شده برای ایمیل و یا شماره همرا اطمینان حاصل فرمایید"
       );
@@ -58,6 +61,7 @@ const RegisterPage = () => {
             onChange={(e) => setValue(e.target.value)}
             isInvalid={invalidInput!}
             errorMessage={errMessage}
+            isDisabled={loading}
           />
         </div>
         <Button
@@ -65,6 +69,8 @@ const RegisterPage = () => {
           className="w-full mt-5"
           size="lg"
           onClick={() => console.log(emailOrPhone())}
+          isLoading={loading}
+          isDisabled={loading}
         >
           ثبت نام
         </Button>
